@@ -128,6 +128,28 @@ YouTube already created the different qualities. This project does not run FFmpe
 
 The Next.js endpoint allows six video-load attempts per minute per client IP. This is an in-memory limit; place an authenticated gateway in front of a public deployment if you need to control who can spend your bandwidth. CORS alone is not viewer authentication.
 
+### Example monthly hosting budget
+
+**Estimate checked 21 November 2026; verify provider prices before purchasing.** This project has no per-play software fee. Your bill includes hosting and outbound transfer, plus any optional domain, backups or other services.
+
+Assume all viewers combined watch **100 hours per day for 30 days = 3,000 viewer-hours/month**. Use the average **combined audio + video bitrate**, not just a resolution label:
+
+```text
+Monthly media GB = viewer-hours × average Mbps × 0.45
+```
+
+For illustration, the DigitalOcean **Basic Regular $24/month** plan has 4 GiB RAM, 2 vCPUs and 4,000 GiB included outbound transfer. Extra outbound transfer costs $0.01/GiB; inbound transfer is free. See [plan pricing](https://www.digitalocean.com/pricing/droplets) and [bandwidth billing](https://docs.digitalocean.com/platform/billing/bandwidth/).
+
+| Average total bitrate | Monthly media data | VPS + estimated transfer | Approximate BDT at an assumed $1 = ৳125 |
+| --- | --- | --- | --- |
+| 1 Mbps | 1,350 GB | $24.00 | ৳3,000 |
+| 2 Mbps | 2,700 GB | $24.00 | ৳3,000 |
+| 4 Mbps | 5,400 GB | $34.29 | ৳4,286 |
+
+GB above is decimal; billing uses GiB (1 GiB = 1,073,741,824 bytes). The table assumes the plan exists for the full month and its allowance is available for this traffic. The allowance accrues over time and is pooled with other team usage. Taxes, card conversion charges and extra services are excluded. Buffering ahead, retries, repeated ranges, probes and other traffic can increase delivered bytes beyond watched media.
+
+This is a billing illustration, not a capacity benchmark or a recommendation that this VPS can handle any peak audience. Test concurrent playback separately. Other providers can charge very different egress rates; do not apply these figures to Azure, AWS or another host. There is no permanent video-media storage charge in this relay design, but ordinary application files, cookies and logs still use disk.
+
 ## Development checks
 
 ```sh
