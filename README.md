@@ -10,7 +10,7 @@ A self-hosted Next.js video player backed by a lightweight Node.js DASH relay.
 [![License: MIT](https://img.shields.io/badge/license-MIT-a78bfa.svg)](LICENSE)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-339933.svg)](https://nodejs.org/)
 
-[Quick start](#quick-start) · [How it works](#how-it-works) · [Self-hosting](docs/self-hosting.md) · [Contributing](CONTRIBUTING.md)
+[Quick start](#quick-start) · [How it works](#how-it-works) · [Self-hosting](docs/self-hosting.md) · [AI coding guide](AGENTS.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -70,6 +70,8 @@ chmod 700 backend/bin/yt-dlp
 Alternatively, install yt-dlp yourself and set `YTDLP_PATH` in `backend/.env` to its executable path. On Windows, use the appropriate official executable and an absolute path with forward slashes. Node is also used as the JavaScript runtime for extraction.
 
 Restart the backend after changing its environment. Load a public recorded YouTube video shorter than four hours. If YouTube requests verification, see [YouTube access and cookies](docs/cookies.md).
+
+That guide includes the exact **[Cookie Editor extension](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl?hl=en)** and the single-tab Incognito → `youtube.com/robots.txt` → Netscape export steps. Cookies are optional backend credentials and are never included in this repository.
 
 ## Configuration
 
@@ -143,6 +145,21 @@ npm run smoke -- https://video.example.com
 ```
 
 The smoke test uses the external sample CDN and checks session creation, 1080p initialization/segments, HTTP ranges, origin checks, relay authentication, invalid URL rejection and byte accounting. CI runs offline core tests, type checking and the production build; it does not use cookies or test YouTube access.
+
+## Working with an AI coding assistant
+
+Start with [AGENTS.md](AGENTS.md), the shared guide to architecture, file ownership, API contracts, environment variables, player lifecycle, sensitive data, limitations and validation. Keep it up to date when those behaviors change.
+
+You can give your coding assistant this prompt:
+
+```text
+Read AGENTS.md and README.md first, then inspect the files relevant to my request.
+Implement: <describe the change>.
+Preserve the documented credential and streaming boundaries, run the checks
+appropriate to the change, and report what changed and what remains unverified.
+```
+
+If your assistant does not automatically discover AGENTS.md, attach or reference it explicitly. Contributor setup and review expectations are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License and credits
 
