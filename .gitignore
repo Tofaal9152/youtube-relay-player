@@ -1,0 +1,16 @@
+node_modules/
+.next/
+.env*
+!.env.local.example
+!backend/.env.example
+backend/bin/
+backend/.venv/
+.artifacts/
+*.log
+*.tsbuildinfo
+__pycache__/
+.DS_Store
+*cookies*
+!docs/cookies.md
+*.pem
+*.key

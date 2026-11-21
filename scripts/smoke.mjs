@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+
+const frontend = (process.argv[2] || 'http://127.0.0.1:3000').replace(/\/$/, '');
+const origin = new URL(frontend).origin;
+const health = await fetch(`${frontend}/api/relay`).then((r) => r.json());
+assert.equal(health.ok, true, 'Frontend must connect to the relay');
+console.log('PASS frontend connects to relay');
+const response = await fetch(`${frontend}/api/relay`, {
+  method: 'POST', headers: { 'Content-Type': 'application/json', Origin: origin }, body: JSON.stringify({ source: 'demo' }),
+});
+assert.equal(response.status, 201);
+const session = await response.json();
+const manifest = await fetch(session.manifestUrl, { headers: { Origin: origin } });
+assert.equal(manifest.status, 200);
+assert.equal(manifest.headers.get('access-control-allow-origin'), origin);
+const text = await manifest.text();
+assert.doesNotMatch(text, /youtube\.com|googlevideo\.com|akamaized\.net/);
+assert.match(text, /height="1080"/);
+console.log('PASS manifest includes multiple qualities and only relay URLs');
+const root = session.manifestUrl.replace('manifest.mpd', 'demo/');
+const init = await fetch(`${root}v7_257-Header.m4s`);
+assert.equal(init.status, 200);
+assert.ok((await init.arrayBuffer()).byteLength > 100);
+const range = await fetch(`${root}v7_257-270146-i-1.m4s`, { headers: { Range: 'bytes=0-1023' } });
+assert.equal(range.status, 206);
+assert.equal((await range.arrayBuffer()).byteLength, 1024);
+assert.match(range.headers.get('content-range'), /^bytes 0-1023\//);
+console.log('PASS 1080p initialization, segment delivery and byte ranges');
+const forbidden = await fetch(session.manifestUrl, { headers: { Origin: 'https://untrusted.example' } });
+assert.equal(forbidden.status, 403);
+const control = `${new URL(session.manifestUrl).href.split('/s/')[0]}/v1/sessions`;
+const noKey = await fetch(control, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"source":"demo"}' });
+assert.equal(noKey.status, 401);
+const invalid = await fetch(`${frontend}/api/relay`, { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: origin }, body: JSON.stringify({ url: 'https://127.0.0.1/private' }) });
+assert.equal(invalid.status, 400);
+const stats = await fetch(session.statsUrl).then((r) => r.json());
+assert.ok(stats.bytes >= 1024);
+const homepage = await fetch(frontend);
+assert.equal(homepage.status, 200);
+assert.match(await homepage.text(), /NIGHTFURY/);
+console.log('PASS origin checks, API authentication, invalid URLs, byte counters and homepage');
