@@ -105,4 +105,4 @@ Media travels from the source through the remote relay directly to the browser. 
 npm run smoke -- https://video.example.com
 ```
 
-Add access control at your gateway if the site should be private. The server-side API key protects backend session creation from direct anonymous calls, but the frontend itself allows its visitors to request sessions. Origin checks are not authentication, and every delivered video byte can count toward your server's outbound transfer bill.
+Add access control at your gateway if the site should be private. The server-side API key protects backend session creation from direct anonymous calls, but the frontend itself allows its visitors to request sessions. Origin checks are not authentication.
