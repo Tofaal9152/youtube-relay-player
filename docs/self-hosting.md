@@ -25,7 +25,7 @@ PORT=4100
 PUBLIC_URL=https://video.example.com/relay-api
 API_KEY=your-random-key-at-least-32-characters
 ALLOWED_ORIGINS=https://video.example.com
-YTDLP_PATH=/srv/nightfury-stream/backend/bin/yt-dlp
+YTDLP_PATH=/srv/youtube-relay-player/backend/bin/yt-dlp
 ```
 
 Replace the key in both files with the same generated secret. Absolute paths are recommended for the backend executable and optional cookies in production. Keep secrets in private environment files, outside build artifacts.
@@ -82,13 +82,13 @@ Transfer the contents of `.next/standalone/` to the frontend runtime directory o
 From the uploaded runtime directory, with a private runtime environment file in place:
 
 ```sh
-PORT=3000 HOSTNAME=127.0.0.1 NODE_ENV=production node --env-file=/srv/nightfury-stream/frontend.env server.js
+PORT=3000 HOSTNAME=127.0.0.1 NODE_ENV=production node --env-file=/srv/youtube-relay-player/frontend.env server.js
 ```
 
 Copy `backend/server.mjs`, `backend/core.mjs` and your separately installed yt-dlp executable to your backend directory. The backend has no npm package dependencies and no build step:
 
 ```sh
-node --env-file=/srv/nightfury-stream/backend/.env /srv/nightfury-stream/backend/server.mjs
+node --env-file=/srv/youtube-relay-player/backend/.env /srv/youtube-relay-player/backend/server.mjs
 ```
 
 Manage both processes with your process supervisor, using a dedicated unprivileged account and private environment files. Restrict cookie and configuration access to that account. Keep enough writable space for yt-dlp's cookie jar if you enable it. No full video media cache is created by this project.

@@ -1,12 +1,12 @@
 <div align="center">
 
-# Nightfury Stream
+# YouTube Relay Player
 
 **Your screen. Your player. Your relay.**
 
 A self-hosted Next.js video player backed by a lightweight Node.js DASH relay.
 
-[![CI](https://github.com/Tofaal9152/nightfury-stream/actions/workflows/ci.yml/badge.svg)](https://github.com/Tofaal9152/nightfury-stream/actions/workflows/ci.yml)
+[![CI](https://github.com/Tofaal9152/youtube-relay-player/actions/workflows/ci.yml/badge.svg)](https://github.com/Tofaal9152/youtube-relay-player/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-a78bfa.svg)](LICENSE)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-339933.svg)](https://nodejs.org/)
 
@@ -34,8 +34,8 @@ Paste a public YouTube link, choose a quality and watch in a clean player. Origi
 Requirements: **Node.js 22+**, npm and, for YouTube extraction, **Python 3.10+** and a current `yt-dlp` executable.
 
 ```sh
-git clone https://github.com/Tofaal9152/nightfury-stream.git
-cd nightfury-stream
+git clone https://github.com/Tofaal9152/youtube-relay-player.git
+cd youtube-relay-player
 npm ci
 npm run setup
 ```
